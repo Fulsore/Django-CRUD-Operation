@@ -1,0 +1,68 @@
+{% extends "base/main.html" %}
+{% load static %}
+
+{% block title %}
+Hello Welcome!
+{% endblock title %}
+
+{% block main_content %}
+<section class="container d-flex align-items-center justify-content-center"
+    style="min-height: 100vh; position: relative; overflow: hidden;">
+
+    <!-- Background Video -->
+    <video autoplay muted loop id="background-video"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.5;">
+        <source src="{% static 'video/Django-Crud-Video-BG.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Content -->
+    <div class="row text-center text-white justify-content-center mt-5" style="position: relative; z-index: 1;">
+        <div class="col-sm-12 col-md-10 col-lg-8">
+            <h1>Welcome</h1>
+            <h5>Enter Your Student Details</h5>
+
+            <table class="table table-striped table-dark mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Student First Name</th>
+                        <th scope="col">Student Last Name</th>
+                        <th scope="col">Student Number</th>
+                        <th scope="col">Student Email Address</th>
+                        <th scope="col">Student Fee</th>
+                        <th scope="col">Delete</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for std in student_data %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ std.student_firstname }}</td>
+                        <td>{{ std.student_lastname }}</td>
+                        <td>{{ std.student_number }}</td>
+                        <td>{{ std.student_email }}</td>
+                        <td>{{ std.student_fee }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'delete-student' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{ std.id }}">
+                                <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                            </form>
+                        </td>
+                        <td>
+                            <a href="{% url 'edit-student' std.id %}" class="btn btn-info btn-sm">EDIT</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'add-student' %}" class="btn btn-primary">ADD</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}
